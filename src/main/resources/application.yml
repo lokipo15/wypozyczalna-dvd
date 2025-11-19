@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/dvdrental
+    username: dvdrental
+    password: dvdrental
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+        format_sql: true
+    open-in-view: false
+  flyway:
+    enabled: true
+
+tvdb:
+  base-url: https://api.thetvdb.com
+  api-key: ${TVDB_API_KEY:}
+  timeout-ms: 3000
+
+server:
+  port: 8080

@@ -1,0 +1,31 @@
+package com.studia.wypozyczalnia.mapper;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+import com.studia.wypozyczalnia.domain.DvdCopy;
+import com.studia.wypozyczalnia.dto.DvdCopyDto;
+
+public final class DvdCopyMapper {
+
+    private DvdCopyMapper() {
+    }
+
+    public static DvdCopyDto toDto(DvdCopy copy) {
+        if (copy == null) {
+            return null;
+        }
+        return new DvdCopyDto(
+            copy.getId(),
+            copy.getTitle() != null ? copy.getTitle().getId() : null,
+            copy.getInventoryCode(),
+            copy.getStatus(),
+            copy.getCreatedAt(),
+            copy.getUpdatedAt());
+    }
+
+    public static List<DvdCopyDto> toDtoList(List<DvdCopy> copies) {
+        return copies == null ? List.of() : copies.stream().filter(Objects::nonNull).map(DvdCopyMapper::toDto).collect(Collectors.toList());
+    }
+}
