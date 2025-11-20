@@ -7,8 +7,6 @@ import com.studia.wypozyczalnia.domain.Title;
 import com.studia.wypozyczalnia.domain.enums.CopyStatus;
 import com.studia.wypozyczalnia.service.command.inventory.AddCopyCmd;
 import com.studia.wypozyczalnia.service.command.inventory.CreateTitleCmd;
-import com.studia.wypozyczalnia.service.command.inventory.CreateTitleFromTvdbCmd;
-import com.studia.wypozyczalnia.service.dto.TvdbSearchItem;
 
 public interface InventoryService {
 
@@ -30,7 +28,4 @@ public interface InventoryService {
 
     List<DvdCopy> findAvailableCopiesByTitle(Long titleId);
 
-    List<TvdbSearchItem> searchTvdb(String query);
-
-    Title createTitleFromTvdb(CreateTitleFromTvdbCmd cmd);
 }

@@ -15,17 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.studia.wypozyczalnia.domain.enums.CopyStatus;
-import com.studia.wypozyczalnia.dto.CreateTitleFromTvdbRequest;
 import com.studia.wypozyczalnia.dto.CreateTitleRequest;
 import com.studia.wypozyczalnia.dto.DvdCopyDto;
 import com.studia.wypozyczalnia.dto.TitleDto;
-import com.studia.wypozyczalnia.dto.TvdbSearchItemDto;
 import com.studia.wypozyczalnia.mapper.DvdCopyMapper;
 import com.studia.wypozyczalnia.mapper.TitleMapper;
-import com.studia.wypozyczalnia.mapper.TvdbMapper;
 import com.studia.wypozyczalnia.service.InventoryService;
 import com.studia.wypozyczalnia.service.command.inventory.CreateTitleCmd;
-import com.studia.wypozyczalnia.service.command.inventory.CreateTitleFromTvdbCmd;
 
 import jakarta.validation.Valid;
 
@@ -66,16 +62,5 @@ public class TitleController {
     @GetMapping("/{id}/copies")
     public List<DvdCopyDto> listCopies(@PathVariable Long id, @RequestParam(name = "status", required = false) CopyStatus status) {
         return DvdCopyMapper.toDtoList(inventoryService.findCopies(id, status));
-    }
-
-    @GetMapping("/search/tvdb")
-    public List<TvdbSearchItemDto> searchTvdb(@RequestParam("q") String query) {
-        return TvdbMapper.toDtoList(inventoryService.searchTvdb(query));
-    }
-
-    @PostMapping("/from-tvdb")
-    public ResponseEntity<TitleDto> createFromTvdb(@Valid @RequestBody CreateTitleFromTvdbRequest request) {
-        var title = inventoryService.createTitleFromTvdb(new CreateTitleFromTvdbCmd(request.tvdbId()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(TitleMapper.toDto(title));
     }
 }

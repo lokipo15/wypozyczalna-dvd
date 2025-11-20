@@ -43,7 +43,9 @@ create table rental (
     copy_id         bigint not null references dvd_copy(id) on delete restrict,
     rented_at       timestamptz not null,
     due_at          timestamptz,
-    returned_at     timestamptz
+    returned_at     timestamptz,
+    created_at      timestamptz not null default timezone('utc', now()),
+    updated_at      timestamptz not null default timezone('utc', now())
 );
 create index idx_rental_customer_rented_at on rental(customer_id, rented_at desc);
 create index idx_rental_returned_null on rental(returned_at) where returned_at is null;

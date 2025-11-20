@@ -11,15 +11,11 @@ import com.studia.wypozyczalnia.domain.Title;
 import com.studia.wypozyczalnia.domain.enums.CopyStatus;
 import com.studia.wypozyczalnia.exception.ConflictException;
 import com.studia.wypozyczalnia.exception.NotFoundException;
-import com.studia.wypozyczalnia.integration.tvdb.TvdbClient;
 import com.studia.wypozyczalnia.repository.DvdCopyRepository;
 import com.studia.wypozyczalnia.repository.TitleRepository;
 import com.studia.wypozyczalnia.service.InventoryService;
 import com.studia.wypozyczalnia.service.command.inventory.AddCopyCmd;
 import com.studia.wypozyczalnia.service.command.inventory.CreateTitleCmd;
-import com.studia.wypozyczalnia.service.command.inventory.CreateTitleFromTvdbCmd;
-import com.studia.wypozyczalnia.service.dto.TvdbSearchItem;
-import com.studia.wypozyczalnia.service.dto.TvdbTitleDetails;
 import com.studia.wypozyczalnia.exception.ValidationException;
 
 @Service
@@ -28,12 +24,10 @@ public class InventoryServiceImpl implements InventoryService {
 
     private final TitleRepository titleRepository;
     private final DvdCopyRepository dvdCopyRepository;
-    private final TvdbClient tvdbClient;
 
-    public InventoryServiceImpl(TitleRepository titleRepository, DvdCopyRepository dvdCopyRepository, TvdbClient tvdbClient) {
+    public InventoryServiceImpl(TitleRepository titleRepository, DvdCopyRepository dvdCopyRepository) {
         this.titleRepository = titleRepository;
         this.dvdCopyRepository = dvdCopyRepository;
-        this.tvdbClient = tvdbClient;
     }
 
     @Override
@@ -118,20 +112,4 @@ public class InventoryServiceImpl implements InventoryService {
         return findCopies(titleId, CopyStatus.AVAILABLE);
     }
 
-    @Override
-    public List<TvdbSearchItem> searchTvdb(String query) {
-        return tvdbClient.search(query);
-    }
-
-    @Override
-    @Transactional
-    public Title createTitleFromTvdb(CreateTitleFromTvdbCmd cmd) {
-        var details = tvdbClient.getDetails(cmd.tvdbId())
-            .orElseThrow(() -> new NotFoundException("TVDB title not found"));
-        return createOrUpdateTitle(fromDetails(details));
-    }
-
-    private CreateTitleCmd fromDetails(TvdbTitleDetails details) {
-        return new CreateTitleCmd(details.name(), details.year(), details.genre(), details.overview(), details.tvdbId());
-    }
 }
