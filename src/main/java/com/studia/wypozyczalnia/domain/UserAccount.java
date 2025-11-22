@@ -3,6 +3,9 @@ package com.studia.wypozyczalnia.domain;
 import com.studia.wypozyczalnia.domain.base.Entity;
 import com.studia.wypozyczalnia.domain.enums.Role;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -26,7 +29,8 @@ public class UserAccount extends Entity {
     private String displayName;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "role", nullable = false, columnDefinition = "user_role")
     private Role role;
 
     @Column(nullable = false)

@@ -3,6 +3,9 @@ package com.studia.wypozyczalnia.domain;
 import com.studia.wypozyczalnia.domain.base.Entity;
 import com.studia.wypozyczalnia.domain.enums.CopyStatus;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -31,7 +34,8 @@ public class DvdCopy extends Entity {
     private String inventoryCode;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
+    @JdbcTypeCode(SqlTypes.NAMED_ENUM)
+    @Column(name = "status", nullable = false, columnDefinition = "copy_status")
     private CopyStatus status = CopyStatus.AVAILABLE;
 
     @Version
