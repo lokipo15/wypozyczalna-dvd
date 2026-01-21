@@ -23,6 +23,7 @@ public final class TitleMapper {
             entity.getGenre(),
             entity.getDescription(),
             entity.getTvdbId(),
+            entity.getPricePerDay(),
             entity.getCreatedAt(),
             entity.getUpdatedAt());
     }

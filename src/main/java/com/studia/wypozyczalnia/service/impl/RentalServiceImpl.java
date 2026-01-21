@@ -36,6 +36,10 @@ public class RentalServiceImpl implements RentalService {
     @Override
     @Transactional
     public Rental createRental(CreateRentalCmd cmd) {
+        var now = Instant.now();
+        if (cmd.dueAt() != null && !cmd.dueAt().isAfter(now)) {
+            throw new ValidationException("Due date must be in the future");
+        }
         var customer = customerRepository.findById(cmd.customerId())
             .orElseThrow(() -> new NotFoundException("Customer not found"));
         var copy = lockCopy(cmd.copyId());
@@ -52,7 +56,7 @@ public class RentalServiceImpl implements RentalService {
         var rental = new Rental();
         rental.setCustomer(customer);
         rental.setCopy(copy);
-        rental.setRentedAt(Instant.now());
+        rental.setRentedAt(now);
         rental.setDueAt(cmd.dueAt());
         return rentalRepository.save(rental);
     }

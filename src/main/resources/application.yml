@@ -22,3 +22,21 @@ tvdb:
 
 server:
   port: 8080
+
+security:
+  jwt:
+    secret: ${JWT_SECRET:12345568901234567890123456789012}
+    expiration-minutes: 60
+  cors:
+    allowed-origins:
+      - http://localhost:5173
+    allowed-methods:
+      - GET
+      - POST
+      - PUT
+      - PATCH
+      - DELETE
+      - OPTIONS
+    allowed-headers:
+      - Authorization
+      - Content-Type

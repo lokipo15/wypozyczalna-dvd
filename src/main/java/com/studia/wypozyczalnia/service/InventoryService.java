@@ -10,7 +10,9 @@ import com.studia.wypozyczalnia.service.command.inventory.CreateTitleCmd;
 
 public interface InventoryService {
 
-    Title createOrUpdateTitle(CreateTitleCmd cmd);
+    Title createTitle(CreateTitleCmd cmd);
+
+    Title updateTitle(Long id, CreateTitleCmd cmd);
 
     void deleteTitle(Long titleId);
 

@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import com.studia.wypozyczalnia.domain.UserAccount;
 import com.studia.wypozyczalnia.exception.ConflictException;
@@ -18,9 +19,11 @@ import com.studia.wypozyczalnia.service.command.user.UpdateUserCmd;
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository userAccountRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserAccountServiceImpl(UserAccountRepository userAccountRepository) {
+    public UserAccountServiceImpl(UserAccountRepository userAccountRepository, PasswordEncoder passwordEncoder) {
         this.userAccountRepository = userAccountRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -32,6 +35,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         var user = new UserAccount();
         user.setUsername(cmd.username());
         user.setDisplayName(cmd.displayName());
+        user.setPasswordHash(passwordEncoder.encode(cmd.password()));
         user.setRole(cmd.role());
         user.setActive(cmd.active() != null ? cmd.active() : Boolean.TRUE);
         return userAccountRepository.save(user);
@@ -42,6 +46,9 @@ public class UserAccountServiceImpl implements UserAccountService {
     public UserAccount updateUser(Long id, UpdateUserCmd cmd) {
         var user = getUser(id);
         user.setDisplayName(cmd.displayName());
+        if (cmd.password() != null && !cmd.password().isBlank()) {
+            user.setPasswordHash(passwordEncoder.encode(cmd.password()));
+        }
         user.setRole(cmd.role());
         user.setActive(cmd.active());
         return userAccountRepository.save(user);

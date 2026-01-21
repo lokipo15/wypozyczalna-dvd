@@ -28,6 +28,9 @@ public class UserAccount extends Entity {
     @Column(name = "display_name", nullable = false)
     private String displayName;
 
+    @Column(name = "password_hash", nullable = false)
+    private String passwordHash;
+
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "role", nullable = false, columnDefinition = "user_role")
@@ -58,6 +61,14 @@ public class UserAccount extends Entity {
 
     public void setDisplayName(String displayName) {
         this.displayName = displayName;
+    }
+
+    public String getPasswordHash() {
+        return passwordHash;
+    }
+
+    public void setPasswordHash(String passwordHash) {
+        this.passwordHash = passwordHash;
     }
 
     public Role getRole() {

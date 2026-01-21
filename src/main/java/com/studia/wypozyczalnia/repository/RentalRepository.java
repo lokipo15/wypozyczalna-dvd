@@ -18,4 +18,6 @@ public interface RentalRepository extends JpaRepository<Rental, Long> {
     Optional<Rental> findByIdAndReturnedAtIsNull(Long rentalId);
 
     boolean existsByCustomerIdAndReturnedAtIsNull(Long customerId);
+
+    void deleteByCopyIdIn(List<Long> copyIds);
 }

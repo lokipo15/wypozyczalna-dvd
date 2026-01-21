@@ -1,6 +1,7 @@
 package com.studia.wypozyczalnia.dto;
 
 import java.time.Instant;
+import java.math.BigDecimal;
 
 public record TitleDto(Long id,
                        String name,
@@ -8,6 +9,7 @@ public record TitleDto(Long id,
                        String genre,
                        String description,
                        String tvdbId,
+                       BigDecimal pricePerDay,
                        Instant createdAt,
                        Instant updatedAt) {
 }

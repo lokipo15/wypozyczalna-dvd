@@ -2,6 +2,7 @@ package com.studia.wypozyczalnia.domain;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.math.BigDecimal;
 
 import com.studia.wypozyczalnia.domain.base.Entity;
 
@@ -34,6 +35,9 @@ public class Title extends Entity {
 
     @Column(name = "tvdb_id")
     private String tvdbId;
+
+    @Column(name = "price_per_day", nullable = false)
+    private BigDecimal pricePerDay;
 
     @OneToMany(mappedBy = "title", fetch = FetchType.LAZY)
     private List<DvdCopy> copies = new ArrayList<>();
@@ -84,6 +88,14 @@ public class Title extends Entity {
 
     public void setTvdbId(String tvdbId) {
         this.tvdbId = tvdbId;
+    }
+
+    public BigDecimal getPricePerDay() {
+        return pricePerDay;
+    }
+
+    public void setPricePerDay(BigDecimal pricePerDay) {
+        this.pricePerDay = pricePerDay;
     }
 
     public List<DvdCopy> getCopies() {

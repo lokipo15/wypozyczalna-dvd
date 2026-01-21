@@ -40,6 +40,7 @@ public class UserAccountController {
         var user = userAccountService.createUser(new CreateUserCmd(
             request.username(),
             request.displayName(),
+            request.password(),
             request.role(),
             request.active()));
         return ResponseEntity.status(HttpStatus.CREATED).body(UserAccountMapper.toDto(user));
@@ -49,6 +50,7 @@ public class UserAccountController {
     public UserAccountDto updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
         var user = userAccountService.updateUser(id, new UpdateUserCmd(
             request.displayName(),
+            request.password(),
             request.role(),
             request.active()));
         return UserAccountMapper.toDto(user);
