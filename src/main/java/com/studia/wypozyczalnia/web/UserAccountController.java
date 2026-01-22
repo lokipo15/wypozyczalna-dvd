@@ -24,6 +24,9 @@ import com.studia.wypozyczalnia.service.command.user.UpdateUserCmd;
 
 import jakarta.validation.Valid;
 
+/**
+ * Kontroler do zarządzania kontami użytkowników.
+ */
 @RestController
 @RequestMapping("/api/users")
 @Validated
@@ -35,6 +38,9 @@ public class UserAccountController {
         this.userAccountService = userAccountService;
     }
 
+    /**
+     * Tworzy nowe konto użytkownika.
+     */
     @PostMapping
     public ResponseEntity<UserAccountDto> createUser(@Valid @RequestBody CreateUserRequest request) {
         var user = userAccountService.createUser(new CreateUserCmd(
@@ -42,10 +48,14 @@ public class UserAccountController {
             request.displayName(),
             request.password(),
             request.role(),
-            request.active()));
+            request.active(),
+            null));
         return ResponseEntity.status(HttpStatus.CREATED).body(UserAccountMapper.toDto(user));
     }
 
+    /**
+     * Aktualizuje dane konta użytkownika.
+     */
     @PutMapping("/{id}")
     public UserAccountDto updateUser(@PathVariable Long id, @Valid @RequestBody UpdateUserRequest request) {
         var user = userAccountService.updateUser(id, new UpdateUserCmd(
@@ -56,16 +66,25 @@ public class UserAccountController {
         return UserAccountMapper.toDto(user);
     }
 
+    /**
+     * Zwraca listę wszystkich użytkowników.
+     */
     @GetMapping
     public List<UserAccountDto> listUsers() {
         return UserAccountMapper.toDtoList(userAccountService.listUsers());
     }
 
+    /**
+     * Pobiera szczegóły użytkownika.
+     */
     @GetMapping("/{id}")
     public UserAccountDto getUser(@PathVariable Long id) {
         return UserAccountMapper.toDto(userAccountService.getUser(id));
     }
 
+    /**
+     * Usuwa konto użytkownika.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userAccountService.deleteUser(id);

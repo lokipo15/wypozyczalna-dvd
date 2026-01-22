@@ -11,12 +11,13 @@ import org.springframework.web.bind.annotation.RestController;
 import com.studia.wypozyczalnia.dto.AuthResponse;
 import com.studia.wypozyczalnia.dto.LoginRequest;
 import com.studia.wypozyczalnia.dto.RegisterRequest;
-import com.studia.wypozyczalnia.dto.UserAccountDto;
-import com.studia.wypozyczalnia.mapper.UserAccountMapper;
 import com.studia.wypozyczalnia.service.AuthService;
 
 import jakarta.validation.Valid;
 
+/**
+ * Kontroler obsługujący logowanie i rejestrację użytkowników.
+ */
 @RestController
 @RequestMapping("/api/auth")
 @Validated
@@ -28,16 +29,21 @@ public class AuthController {
         this.authService = authService;
     }
 
+    /**
+     * Logowanie użytkownika i zwrot tokenu JWT.
+     */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request) {
         String token = authService.login(request.username(), request.password());
         return ResponseEntity.ok(new AuthResponse(token));
     }
 
+    /**
+     * Rejestracja użytkownika i zwrot tokenu JWT.
+     */
     @PostMapping("/register")
-    public ResponseEntity<UserAccountDto> register(@Valid @RequestBody RegisterRequest request) {
-        var user = authService.register(request);
-        return ResponseEntity.status(HttpStatus.CREATED).body(UserAccountMapper.toDto(user));
+    public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request) {
+        String token = authService.register(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new AuthResponse(token));
     }
 }
-

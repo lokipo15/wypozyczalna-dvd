@@ -8,25 +8,46 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * Encja klienta przechowująca dane kontaktowe i status aktywności.
+ */
 @jakarta.persistence.Entity
 @Table(name = "customer")
 public class Customer extends Entity {
 
+    /**
+     * Identyfikator klienta.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Imię klienta.
+     */
     @Column(name = "first_name", nullable = false)
     private String firstName;
 
+    /**
+     * Nazwisko klienta.
+     */
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    /**
+     * Adres e-mail klienta.
+     */
     @Column(nullable = false)
     private String email;
 
+    /**
+     * Numer telefonu klienta.
+     */
     private String phone;
 
+    /**
+     * Flaga określająca aktywność klienta.
+     */
     @Column(nullable = false)
     private Boolean active = Boolean.TRUE;
 

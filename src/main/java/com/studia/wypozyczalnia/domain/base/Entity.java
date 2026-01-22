@@ -10,14 +10,23 @@ import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 
+/**
+ * Bazowa encja z polami audytowymi wykorzystywana przez wszystkie modele domenowe.
+ */
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class Entity {
 
+    /**
+     * Czas utworzenia rekordu w bazie.
+     */
     @CreatedDate
     @Column(name = "created_at", nullable = false, updatable = false)
     private Instant createdAt;
 
+    /**
+     * Czas ostatniej modyfikacji rekordu w bazie.
+     */
     @LastModifiedDate
     @Column(name = "updated_at", nullable = false)
     private Instant updatedAt;

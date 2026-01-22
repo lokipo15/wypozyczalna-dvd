@@ -16,6 +16,9 @@ import com.studia.wypozyczalnia.service.CustomerService;
 import com.studia.wypozyczalnia.service.command.customer.CreateCustomerCmd;
 import com.studia.wypozyczalnia.service.command.customer.UpdateCustomerCmd;
 
+/**
+ * Implementacja serwisu zarządzającego danymi klientów.
+ */
 @Service
 @Transactional(readOnly = true)
 public class CustomerServiceImpl implements CustomerService {
@@ -28,6 +31,9 @@ public class CustomerServiceImpl implements CustomerService {
         this.rentalRepository = rentalRepository;
     }
 
+    /**
+     * Tworzy nowego klienta.
+     */
     @Override
     @Transactional
     public Customer createCustomer(CreateCustomerCmd cmd) {
@@ -43,6 +49,9 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.save(customer);
     }
 
+    /**
+     * Aktualizuje dane klienta.
+     */
     @Override
     @Transactional
     public Customer updateCustomer(Long id, UpdateCustomerCmd cmd) {
@@ -60,6 +69,9 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.save(customer);
     }
 
+    /**
+     * Usuwa klienta, jeśli nie posiada aktywnych wypożyczeń.
+     */
     @Override
     @Transactional
     public void deleteCustomer(Long id) {
@@ -70,11 +82,17 @@ public class CustomerServiceImpl implements CustomerService {
         customerRepository.delete(customer);
     }
 
+    /**
+     * Pobiera klienta po identyfikatorze.
+     */
     @Override
     public Customer getCustomer(Long id) {
         return customerRepository.findById(id).orElseThrow(() -> new NotFoundException("Customer not found"));
     }
 
+    /**
+     * Wyszukuje klientów po imieniu, nazwisku lub e-mailu.
+     */
     @Override
     public List<Customer> findCustomers(String query) {
         if (!StringUtils.hasText(query)) {

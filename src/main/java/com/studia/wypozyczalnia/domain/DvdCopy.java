@@ -18,26 +18,44 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 
+/**
+ * Kopia płyty DVD powiązana z tytułem.
+ */
 @jakarta.persistence.Entity
 @Table(name = "dvd_copy")
 public class DvdCopy extends Entity {
 
+    /**
+     * Identyfikator kopii.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Tytuł, do którego należy kopia.
+     */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "title_id", nullable = false)
     private Title title;
 
+    /**
+     * Kod inwentarzowy kopii.
+     */
     @Column(name = "inventory_code", nullable = false, unique = true)
     private String inventoryCode;
 
+    /**
+     * Aktualny status dostępności kopii.
+     */
     @Enumerated(EnumType.STRING)
     @JdbcTypeCode(SqlTypes.NAMED_ENUM)
     @Column(name = "status", nullable = false, columnDefinition = "copy_status")
     private CopyStatus status = CopyStatus.AVAILABLE;
 
+    /**
+     * Wersja rekordu do kontroli współbieżności.
+     */
     @Version
     @Column(name = "version")
     private Long version;

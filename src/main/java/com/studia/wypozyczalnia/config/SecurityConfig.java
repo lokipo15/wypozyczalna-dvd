@@ -23,10 +23,14 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import com.studia.wypozyczalnia.security.JwtAuthenticationFilter;
+import com.studia.wypozyczalnia.config.TvdbProperties;
 
+/**
+ * Konfiguracja zabezpieczeń HTTP i JWT aplikacji.
+ */
 @Configuration
 @EnableMethodSecurity
-@EnableConfigurationProperties({JwtProperties.class, CorsProperties.class})
+@EnableConfigurationProperties({JwtProperties.class, CorsProperties.class, TvdbProperties.class})
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
@@ -50,6 +54,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .requestMatchers("/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html").permitAll()
                 .requestMatchers("/actuator/**").permitAll()
+                .requestMatchers("/api/tvdb/**").hasAnyRole("ADMIN", "CLERK")
                 .requestMatchers("/api/users/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -89,4 +94,3 @@ public class SecurityConfig {
         return source;
     }
 }
-

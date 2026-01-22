@@ -1,5 +1,6 @@
 package com.studia.wypozyczalnia.service.impl;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -19,6 +20,9 @@ import com.studia.wypozyczalnia.service.command.inventory.AddCopyCmd;
 import com.studia.wypozyczalnia.service.command.inventory.CreateTitleCmd;
 import com.studia.wypozyczalnia.exception.ValidationException;
 
+/**
+ * Implementacja serwisu zarządzającego tytułami i kopiami w magazynie.
+ */
 @Service
 @Transactional(readOnly = true)
 public class InventoryServiceImpl implements InventoryService {
@@ -33,6 +37,9 @@ public class InventoryServiceImpl implements InventoryService {
         this.rentalRepository = rentalRepository;
     }
 
+    /**
+     * Tworzy nowy tytuł na podstawie komendy wejściowej.
+     */
     @Override
     @Transactional
     public Title createTitle(CreateTitleCmd cmd) {
@@ -43,6 +50,7 @@ public class InventoryServiceImpl implements InventoryService {
         if (cmd.pricePerDay() == null) {
             throw new ValidationException("Price per day is required");
         }
+        validateRating(cmd.rating());
         titleRepository.findByNameIgnoreCase(name.trim()).ifPresent(existing -> {
             throw new ConflictException("Title name already exists");
         });
@@ -51,6 +59,9 @@ public class InventoryServiceImpl implements InventoryService {
         return titleRepository.save(title);
     }
 
+    /**
+     * Aktualizuje dane tytułu.
+     */
     @Override
     @Transactional
     public Title updateTitle(Long id, CreateTitleCmd cmd) {
@@ -62,6 +73,7 @@ public class InventoryServiceImpl implements InventoryService {
         if (cmd.pricePerDay() == null) {
             throw new ValidationException("Price per day is required");
         }
+        validateRating(cmd.rating());
         titleRepository.findByNameIgnoreCase(name.trim()).ifPresent(existing -> {
             if (!existing.getId().equals(id)) {
                 throw new ConflictException("Title name already exists");
@@ -71,6 +83,9 @@ public class InventoryServiceImpl implements InventoryService {
         return titleRepository.save(title);
     }
 
+    /**
+     * Usuwa tytuł wraz z możliwymi do usunięcia kopiami.
+     */
     @Override
     @Transactional
     public void deleteTitle(Long titleId) {
@@ -95,11 +110,17 @@ public class InventoryServiceImpl implements InventoryService {
         titleRepository.delete(title);
     }
 
+    /**
+     * Pobiera tytuł po identyfikatorze.
+     */
     @Override
     public Title getTitle(Long id) {
         return titleRepository.findById(id).orElseThrow(() -> new NotFoundException("Title not found"));
     }
 
+    /**
+     * Wyszukuje tytuły lokalnie na podstawie frazy.
+     */
     @Override
     public List<Title> searchLocalTitles(String query) {
         if (!StringUtils.hasText(query)) {
@@ -108,6 +129,9 @@ public class InventoryServiceImpl implements InventoryService {
         return titleRepository.findByNameContainingIgnoreCase(query.trim());
     }
 
+    /**
+     * Dodaje nową kopię DVD do tytułu.
+     */
     @Override
     @Transactional
     public DvdCopy addCopy(AddCopyCmd cmd) {
@@ -124,6 +148,9 @@ public class InventoryServiceImpl implements InventoryService {
         return dvdCopyRepository.save(copy);
     }
 
+    /**
+     * Aktualizuje status kopii.
+     */
     @Override
     @Transactional
     public void updateCopyStatus(Long copyId, CopyStatus status) {
@@ -132,20 +159,29 @@ public class InventoryServiceImpl implements InventoryService {
         dvdCopyRepository.save(copy);
     }
 
+    /**
+     * Pobiera kopię po identyfikatorze.
+     */
     @Override
     public DvdCopy getCopy(Long id) {
         return dvdCopyRepository.findById(id).orElseThrow(() -> new NotFoundException("Copy not found"));
     }
 
+    /**
+     * Zwraca kopie powiązane z tytułem, opcjonalnie filtrowane po statusie.
+     */
     @Override
     public List<DvdCopy> findCopies(Long titleId, CopyStatus status) {
-        getTitle(titleId); // ensure title exists
+        getTitle(titleId);
         if (status != null) {
             return dvdCopyRepository.findByTitleIdAndStatus(titleId, status);
         }
         return dvdCopyRepository.findByTitleId(titleId);
     }
 
+    /**
+     * Zwraca dostępne kopie danego tytułu.
+     */
     @Override
     public List<DvdCopy> findAvailableCopiesByTitle(Long titleId) {
         return findCopies(titleId, CopyStatus.AVAILABLE);
@@ -154,10 +190,22 @@ public class InventoryServiceImpl implements InventoryService {
     private void applyTitleData(Title title, CreateTitleCmd cmd) {
         title.setName(cmd.name().trim());
         title.setYear(cmd.year());
-        title.setGenre(cmd.genre());
+        title.setGenres(cmd.genres() != null ? cmd.genres() : List.of());
         title.setDescription(cmd.description());
         title.setTvdbId(cmd.tvdbId());
+        title.setRating(cmd.rating());
         title.setPricePerDay(cmd.pricePerDay());
+        title.setThumbnailUrl(cmd.thumbnailUrl());
+        title.setImageUrl(cmd.imageUrl());
+    }
+
+    private void validateRating(BigDecimal rating) {
+        if (rating == null) {
+            return;
+        }
+        if (rating.compareTo(BigDecimal.ZERO) < 0 || rating.compareTo(BigDecimal.TEN) > 0) {
+            throw new ValidationException("Rating must be between 0 and 10");
+        }
     }
 
 }

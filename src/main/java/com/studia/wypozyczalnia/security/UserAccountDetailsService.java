@@ -7,6 +7,9 @@ import org.springframework.stereotype.Service;
 
 import com.studia.wypozyczalnia.repository.UserAccountRepository;
 
+/**
+ * Serwis ładujący dane użytkownika na potrzeby Spring Security.
+ */
 @Service
 public class UserAccountDetailsService implements UserDetailsService {
 
@@ -16,6 +19,9 @@ public class UserAccountDetailsService implements UserDetailsService {
         this.userAccountRepository = userAccountRepository;
     }
 
+    /**
+     * Pobiera użytkownika na podstawie nazwy.
+     */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return userAccountRepository.findByUsernameIgnoreCase(username)
@@ -23,4 +29,3 @@ public class UserAccountDetailsService implements UserDetailsService {
             .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 }
-

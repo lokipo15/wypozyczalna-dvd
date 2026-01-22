@@ -13,28 +13,49 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
+/**
+ * Wypożyczenie kopii DVD przypisane do klienta.
+ */
 @jakarta.persistence.Entity
 @Table(name = "rental")
 public class Rental extends Entity {
 
+    /**
+     * Identyfikator wypożyczenia.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    /**
+     * Klient, który dokonał wypożyczenia.
+     */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "customer_id", nullable = false)
     private Customer customer;
 
+    /**
+     * Wypożyczona kopia DVD.
+     */
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "copy_id", nullable = false)
     private DvdCopy copy;
 
+    /**
+     * Data rozpoczęcia wypożyczenia.
+     */
     @Column(name = "rented_at", nullable = false)
     private Instant rentedAt;
 
+    /**
+     * Termin zwrotu kopii.
+     */
     @Column(name = "due_at")
     private Instant dueAt;
 
+    /**
+     * Faktyczna data zwrotu kopii.
+     */
     @Column(name = "returned_at")
     private Instant returnedAt;
 

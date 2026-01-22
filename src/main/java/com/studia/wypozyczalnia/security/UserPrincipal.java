@@ -9,6 +9,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import com.studia.wypozyczalnia.domain.UserAccount;
 
+/**
+ * Reprezentacja użytkownika na potrzeby autoryzacji Spring Security.
+ */
 public class UserPrincipal implements UserDetails {
 
     private final UserAccount user;
@@ -17,10 +20,16 @@ public class UserPrincipal implements UserDetails {
         this.user = user;
     }
 
+    /**
+     * Tworzy principal na podstawie encji użytkownika.
+     */
     public static UserPrincipal from(UserAccount user) {
         return new UserPrincipal(user);
     }
 
+    /**
+     * Zwraca encję użytkownika powiązaną z principalem.
+     */
     public UserAccount getUser() {
         return user;
     }
@@ -60,4 +69,3 @@ public class UserPrincipal implements UserDetails {
         return Boolean.TRUE.equals(user.getActive());
     }
 }
-

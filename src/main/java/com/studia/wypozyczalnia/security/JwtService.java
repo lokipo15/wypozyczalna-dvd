@@ -20,6 +20,9 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
+/**
+ * Serwis generujący i weryfikujący tokeny JWT.
+ */
 @Service
 public class JwtService {
 
@@ -31,6 +34,9 @@ public class JwtService {
         this.secretKey = Keys.hmacShaKeyFor(jwtProperties.getSecret().getBytes(StandardCharsets.UTF_8));
     }
 
+    /**
+     * Generuje token JWT dla podanego użytkownika.
+     */
     public String generateToken(UserDetails userDetails) {
         Instant now = Instant.now();
         Instant expiration = now.plus(jwtProperties.getExpirationMinutes(), ChronoUnit.MINUTES);
@@ -48,11 +54,17 @@ public class JwtService {
             .compact();
     }
 
+    /**
+     * Wyciąga nazwę użytkownika z tokenu.
+     */
     public String extractUsername(String token) {
         Claims claims = extractAllClaims(token);
         return claims != null ? claims.getSubject() : null;
     }
 
+    /**
+     * Wyciąga role zapisane w tokenie.
+     */
     public List<String> extractRoles(String token) {
         Claims claims = extractAllClaims(token);
         if (claims == null) {
@@ -68,6 +80,9 @@ public class JwtService {
         return Collections.emptyList();
     }
 
+    /**
+     * Sprawdza poprawność tokenu względem użytkownika.
+     */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         try {
             Claims claims = parseClaims(token);

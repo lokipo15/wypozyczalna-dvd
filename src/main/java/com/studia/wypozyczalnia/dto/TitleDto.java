@@ -1,15 +1,19 @@
 package com.studia.wypozyczalnia.dto;
 
-import java.time.Instant;
 import java.math.BigDecimal;
+import java.time.Instant;
+import java.util.List;
 
 public record TitleDto(Long id,
                        String name,
                        Integer year,
-                       String genre,
+                       List<String> genres,
                        String description,
                        String tvdbId,
+                       BigDecimal rating,
                        BigDecimal pricePerDay,
+                       String thumbnailUrl,
+                       String imageUrl,
                        Instant createdAt,
                        Instant updatedAt) {
 }

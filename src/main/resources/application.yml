@@ -16,8 +16,8 @@ spring:
     enabled: true
 
 tvdb:
-  base-url: https://api.thetvdb.com
-  api-key: ${TVDB_API_KEY:}
+  base-url: https://api4.thetvdb.com/v4
+  api-key: eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJhZ2UiOiIiLCJhcGlrZXkiOiI1ODBjOTIzOS1kMmY4LTQ0NjAtYTIyZS02ODMxOTAwYTk3YTMiLCJjb21tdW5pdHlfc3VwcG9ydGVkIjp0cnVlLCJleHAiOjE3NzE3NDAyMTUsImdlbmRlciI6IiIsImhpdHNfcGVyX2RheSI6MTAwMDAwMDAwLCJoaXRzX3Blcl9tb250aCI6MTAwMDAwMDAwLCJpZCI6IjI0NDE2OTYiLCJpc19tb2QiOmZhbHNlLCJpc19zeXN0ZW1fa2V5IjpmYWxzZSwiaXNfdHJ1c3RlZCI6ZmFsc2UsInBpbiI6IktBUFBSUVpSIiwicm9sZXMiOltdLCJ0ZW5hbnQiOiJ0dmRiIiwidXVpZCI6IiJ9.i145vBa_6LsLmxfwPXUL5aHX369z947u8rCgfoCPVX46aOp42YIUoDnsOI-hEJUldhcQXobPpMnOi7RXpegeQXkG0D5Y8c920jEK6rlsN-6_g9IBfaMFHl9Z8QFctGwzheRON2wMzGW3gBPlWDSGKJZ8Wc7eM3wAvYWDxmWSRg_J0G_f8HmpdgY-E7vxMku9rD0BlxAWYLQbP1M1TIxPuQMUlFf5DP5Hb22tNW2lyAFqNZUDRqDIQXHpx640F8eHslLDvqsWVWU6LcqdXd90p_YDffrhvCxyZnHNPSS79nYvK-87ffP7k89nxCBavefEAp_LQqYup4rHJG8y9cpIC4e5LwBZ6678YQNkosBKc_sYo1CYM9DGpi4uNuzdSwjvNQ7pL2d_iK9_a3PQVTn0QtCcQrwQDLB52MahRb-y7QLrpmJlJpq5WP9h3XlqrmtIeQwcmlS4t2pBGE0Z4VMnvAQeHs_QLA6_wO0f9w2M82ooiaRUglBb33J9afRxYqHOrZA2l_HZUjqnAVHudNRC1glINXPiKxgzHvLxL5iQfnooFiKUWEkj-UxsfNd3HFoSw-xYLlK4cLgbbrhxfjZsJxvLYPw1raVNfQS3O2-fDbBp2A_J4MMhBJyAjZzPpfx99G5jlQ1ViHc-jn_0T57QI38omb9ZFcvOVY_by4FeMd8
   timeout-ms: 3000
 
 server:
@@ -40,3 +40,7 @@ security:
     allowed-headers:
       - Authorization
       - Content-Type
+
+logging:
+  level:
+    com.studia.wypozyczalnia: DEBUG

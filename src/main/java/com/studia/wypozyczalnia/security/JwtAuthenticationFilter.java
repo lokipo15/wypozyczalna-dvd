@@ -16,6 +16,9 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
+/**
+ * Filtrowanie żądań HTTP w celu uwierzytelnienia na podstawie tokenu JWT.
+ */
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
@@ -27,6 +30,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userDetailsService = userDetailsService;
     }
 
+    /**
+     * Wstrzykuje uwierzytelnienie do kontekstu bezpieczeństwa, jeśli token jest poprawny.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request,
                                     HttpServletResponse response,
@@ -53,4 +59,3 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
-

@@ -20,6 +20,9 @@ import com.studia.wypozyczalnia.service.command.inventory.AddCopyCmd;
 
 import jakarta.validation.Valid;
 
+/**
+ * Kontroler zarządzający kopiami DVD.
+ */
 @RestController
 @RequestMapping("/api/copies")
 @Validated
@@ -31,18 +34,27 @@ public class CopyController {
         this.inventoryService = inventoryService;
     }
 
+    /**
+     * Tworzy nową kopię DVD dla wskazanego tytułu.
+     */
     @PostMapping
     public ResponseEntity<DvdCopyDto> createCopy(@Valid @RequestBody CreateCopyRequest request) {
         var copy = inventoryService.addCopy(new AddCopyCmd(request.titleId(), request.inventoryCode()));
         return ResponseEntity.status(HttpStatus.CREATED).body(DvdCopyMapper.toDto(copy));
     }
 
+    /**
+     * Aktualizuje status kopii DVD.
+     */
     @PatchMapping("/{id}/status")
     public DvdCopyDto updateStatus(@PathVariable Long id, @Valid @RequestBody UpdateCopyStatusRequest request) {
         inventoryService.updateCopyStatus(id, request.status());
         return DvdCopyMapper.toDto(inventoryService.getCopy(id));
     }
 
+    /**
+     * Pobiera szczegóły kopii DVD.
+     */
     @GetMapping("/{id}")
     public DvdCopyDto getCopy(@PathVariable Long id) {
         return DvdCopyMapper.toDto(inventoryService.getCopy(id));

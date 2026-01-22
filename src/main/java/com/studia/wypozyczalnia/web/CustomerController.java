@@ -25,6 +25,9 @@ import com.studia.wypozyczalnia.service.command.customer.UpdateCustomerCmd;
 
 import jakarta.validation.Valid;
 
+/**
+ * Kontroler do zarządzania klientami.
+ */
 @RestController
 @RequestMapping("/api/customers")
 @Validated
@@ -36,6 +39,9 @@ public class CustomerController {
         this.customerService = customerService;
     }
 
+    /**
+     * Tworzy nowego klienta.
+     */
     @PostMapping
     public ResponseEntity<CustomerDto> createCustomer(@Valid @RequestBody CreateCustomerRequest request) {
         var customer = customerService.createCustomer(new CreateCustomerCmd(
@@ -46,6 +52,9 @@ public class CustomerController {
         return ResponseEntity.status(HttpStatus.CREATED).body(CustomerMapper.toDto(customer));
     }
 
+    /**
+     * Aktualizuje dane klienta.
+     */
     @PutMapping("/{id}")
     public CustomerDto updateCustomer(@PathVariable Long id, @Valid @RequestBody UpdateCustomerRequest request) {
         var customer = customerService.updateCustomer(id, new UpdateCustomerCmd(
@@ -57,16 +66,25 @@ public class CustomerController {
         return CustomerMapper.toDto(customer);
     }
 
+    /**
+     * Pobiera dane klienta.
+     */
     @GetMapping("/{id}")
     public CustomerDto getCustomer(@PathVariable Long id) {
         return CustomerMapper.toDto(customerService.getCustomer(id));
     }
 
+    /**
+     * Zwraca listę klientów, opcjonalnie filtrowaną po frazie.
+     */
     @GetMapping
     public List<CustomerDto> listCustomers(@RequestParam(name = "q", required = false) String query) {
         return CustomerMapper.toDtoList(customerService.findCustomers(query));
     }
 
+    /**
+     * Usuwa klienta.
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);

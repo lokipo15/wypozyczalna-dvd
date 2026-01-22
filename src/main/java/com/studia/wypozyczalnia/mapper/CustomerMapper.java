@@ -7,11 +7,17 @@ import java.util.stream.Collectors;
 import com.studia.wypozyczalnia.domain.Customer;
 import com.studia.wypozyczalnia.dto.CustomerDto;
 
+/**
+ * Mapper konwertujący encje klientów na DTO.
+ */
 public final class CustomerMapper {
 
     private CustomerMapper() {
     }
 
+    /**
+     * Konwertuje encję klienta na DTO.
+     */
     public static CustomerDto toDto(Customer entity) {
         if (entity == null) {
             return null;
@@ -27,6 +33,9 @@ public final class CustomerMapper {
             entity.getUpdatedAt());
     }
 
+    /**
+     * Konwertuje listę klientów na listę DTO.
+     */
     public static List<CustomerDto> toDtoList(List<Customer> customers) {
         return customers == null ? List.of() : customers.stream().filter(Objects::nonNull).map(CustomerMapper::toDto).collect(Collectors.toList());
     }
